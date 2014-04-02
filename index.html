@@ -1,0 +1,1473 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>El javascript acabará con nosotros</title>
+  <style type="text/css">
+    body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #222;
+  background-color: #f7f7f7;
+  font-size: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+}
+
+.slide-content {
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  margin: 80px auto 0 auto;
+  padding: 30px;
+
+  font-weight: 200;
+  font-size: 200%;
+  line-height: 1.375;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.arrow {
+  width: 0; height: 0;
+  border: 30px solid #333;
+  float: left;
+  margin-right: 30px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.prev {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+
+  border-left-width: 0;
+  border-right-width: 50px;
+}
+
+.next {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+
+  border-left-width: 50px;
+  border-right-width: 0;
+}
+
+.prev:hover {
+  border-right-color: #888;
+  cursor: pointer;
+}
+
+.next:hover {
+  border-left-color: #888;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 300%;
+  line-height: 1.2;
+  text-align: center;
+  margin: 170px 0 0;
+}
+
+h2 {
+  font-size: 100%;
+  line-height: 1.2;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: 200;
+}
+
+h3 {
+  font-size: 140%;
+  line-height: 1.2;
+  border-bottom: 1px solid #aaa;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+ul {
+  padding: 20px 0 0 60px;
+  font-weight: 200;
+  line-height: 1.375;
+}
+
+.author h1 {
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.author h3 {
+  font-weight: 100;
+  text-align: center;
+  font-size: 95%;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: #44a4dd;
+}
+
+a:hover {
+  color: #66b5ff;
+}
+
+pre {
+  font-size: 60%;
+  line-height: 1.3;
+}
+
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 3px;
+  background-color: #b4b4b4;
+
+  -webkit-transition: width 0.05s ease-out;
+  -moz-transition: width 0.05s ease-out;
+  -o-transition: width 0.05s ease-out;
+  transition: width 0.05s ease-out;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 850px) {
+
+  body {
+    font-size: 70%;
+  }
+
+  .slide-content {
+    width: auto;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  h1 {
+    margin-top: 120px;
+  }
+
+  .prev, .prev:hover {
+    border-right-color: rgba(135, 135, 135, 0.5);
+  }
+
+  .next, .next:hover {
+    border-left-color: rgba(135, 135, 135, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 50%;
+    overflow: hidden;
+  }
+
+  .slide-content {
+    padding: 10px;
+    margin-top: 10px;
+    height: 340px;
+  }
+
+  h1 {
+    margin-top: 50px;
+  }
+
+  ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter;
+  }
+
+  .hidden {
+    display: inline;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  body {
+    margin: 0 auto !important;
+    border: 0;
+    padding: 0;
+    float: none !important;
+    overflow: visible;
+    background: none !important;
+    font-size: 52%;
+  }
+
+  .progress, .controls {
+    display: none;
+  }
+
+  .slide {
+    position: static;
+  }
+
+  .slide-content {
+    border: 1px solid #222;
+    margin-top: 0;
+    margin-bottom: 40px;
+    height: 3.5in;
+    overflow: visible;
+  }
+
+  .slide:nth-child(even) {
+    /* 2 slides per page */
+    page-break-before: always;
+  }
+}
+
+/*
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+*/
+
+code, pre {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  overflow: auto;
+  padding: 6px 10px;
+}
+
+code {
+  padding: 0 5px;
+}
+
+pre>code {
+  margin: 0; padding: 0;
+  border: none;
+  background: transparent;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .javadoc {
+  color: #998;
+  font-style: italic
+}
+
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .nginx .title,
+pre .subst,
+pre .request,
+pre .status {
+  color: #333;
+  font-weight: bold
+}
+
+pre .number,
+pre .hexcolor,
+pre .ruby .constant {
+  color: #099;
+}
+
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula {
+  color: #d14
+}
+
+pre .title,
+pre .id {
+  color: #900;
+  font-weight: bold
+}
+
+pre .javascript .title,
+pre .lisp .title,
+pre .clojure .title,
+pre .subst {
+  font-weight: normal
+}
+
+pre .class .title,
+pre .haskell .type,
+pre .vhdl .literal,
+pre .tex .command {
+  color: #458;
+  font-weight: bold
+}
+
+pre .tag,
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
+  color: #000080;
+  font-weight: normal
+}
+
+pre .attribute,
+pre .variable,
+pre .lisp .body {
+  color: #008080
+}
+
+pre .regexp {
+  color: #009926
+}
+
+pre .class {
+  color: #458;
+  font-weight: bold
+}
+
+pre .symbol,
+pre .ruby .symbol .string,
+pre .lisp .keyword,
+pre .tex .special,
+pre .prompt {
+  color: #990073
+}
+
+pre .built_in,
+pre .lisp .title,
+pre .clojure .built_in {
+  color: #0086b3
+}
+
+pre .preprocessor,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .cdata {
+  color: #999;
+  font-weight: bold
+}
+
+pre .deletion {
+  background: #fdd
+}
+
+pre .addition {
+  background: #dfd
+}
+
+pre .diff .change {
+  background: #0086b3
+}
+
+pre .chunk {
+  color: #aaa
+}
+
+@font-face {
+  font-family: URWGroteskTextLigWid;
+  src: url(URWGroteskTextLigWid-Euro.ttf);
+}
+
+body {
+  background: #f5f4f0;
+  color: #333;
+  font-family: URWGroteskTextLigWid, sans-serif;
+}
+
+strong {
+  color: #b00;
+}
+
+.slide-content {
+  width: 1024px;
+  height: 768px;
+  margin: 0 auto;
+  font-size: 40px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.slide-content h1 {
+  margin: 50px 0 50px 0;
+}
+
+.slide-content h2 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.slide-content h3 {
+  border: none;
+  text-align: center;
+}
+
+.slide-content ul {
+  width: 100%;
+  padding: 0;
+  font-size: 1.2em;
+  list-style: none;
+}
+
+.slide-content pre {
+  text-align: left;
+  border: none;
+  margin: 0;
+}
+
+.slide-content code {
+  border: none;
+}
+
+.arrow {
+  border-width: 20px;
+}
+
+.prev {
+  border-right-width: 25px;
+}
+
+.next {
+  border-left-width: 25px;
+}
+
+/* jsbin slide */
+
+.jsbin iframe {
+  width: 1024px;
+  min-height: 768px ! important;
+}
+
+/* cover slide */
+.cover {
+  background: #ABC510;
+  color: #eee;
+}
+
+.cover .slide-content {
+  align-items: center;
+  text-align: center;
+}
+
+.cover h1 {
+  margin: 0 0 1em 0;
+  line-height: 1em;
+}
+
+.cover a {
+  color: #305309;
+}
+
+/* section slide */
+
+.section {
+  background: #1084C5;
+  color: #fff;
+}
+
+.section .slide-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* image slide */
+
+.image .slide-content {
+  padding: 0;
+}
+
+.image p {
+  margin: 0;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+}
+
+.image.full-height img {
+  width: auto;
+  height: 768px;
+}
+
+.image.vcenter p {
+  width: 100%;
+}
+
+/* quote slide */
+.quote {
+  background: #222;
+  color: #fff;
+}
+
+.quote .slide-content {
+  position: relative;
+}
+
+.quote blockquote {
+  font-size: 130%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+cite {
+  text-align: right;
+  display: block;
+  font-size: 1.5em;
+}
+
+/* tweet slide */
+.tweet {
+  background: #c7ddec url(trabe-theme/bg_tweet.png) repeat-x;
+}
+
+  </style>
+</head>
+<body>
+  
+  <div class="slide  cover" id="slide-1">
+    <section class="slide-content"><h1 id="el-javascript-acabar-con-nosotros">El Javascript acabará con nosotros</h1>
+<h2 id="http-ir-gl-ejacn"><a href="http://ir.gl/ejacn">http://ir.gl/ejacn</a></h2>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-2">
+    <section class="slide-content"><p><img src="images/who_we_are.png" alt="Who we are"></p>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-3">
+    <section class="slide-content"><p><img src="images/trabe.png" alt="Trabe"></p>
+<!--
+  a qué nos dedicamos, qué hacemos para quién, tecnologías, etc --></section>
+  </div>
+  <div class="slide hidden  image" id="slide-4">
+    <section class="slide-content"><p><img src="images/men_at_work.png" alt="Men at work"></p>
+</section>
+  </div>
+  <div class="slide hidden  quote" id="slide-5">
+    <section class="slide-content"><blockquote>
+<p>&quot;El Javascript acabará con nosotros&quot;</p>
+</blockquote>
+<p><cite>@reyam</cite></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-6">
+    <section class="slide-content"><p><img src="images/reyam_js_will_kill_you.png" alt="Mayer says"></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-7">
+    <section class="slide-content"><p><img src="images/reyam_js_acabara.png" alt="Mayer dice"></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-8">
+    <section class="slide-content"><p><img src="images/reyam_js_recunca.png" alt="Mayer recunca"></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-9">
+    <section class="slide-content"><p><img src="images/tenderlove_this.png" alt="Tenderlove this tweet"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-10">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="keyword">var</span> john = {
+  name : <span class="string">'John'</span>,
+
+  greet : <span class="keyword">function</span>() {
+    console.log(<span class="string">'Hello, I am '</span> + <span class="keyword">this</span>.name);
+  }
+}
+
+john.greet(); <span class="comment">// Hello, I am John</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-11">
+    <section class="slide-content"><pre><code class="lang-javascript">
+<span class="keyword">var</span> greeter = john.greet;
+greeter(); <span class="comment">// Hello, I am</span>
+
+<span class="keyword">var</span> name = <span class="string">'the window'</span>;
+greeter(); <span class="comment">// Hello, I am the window</span>
+
+<span class="keyword">var</span> mary = {
+  name : <span class="string">'Mary'</span>;
+}
+greeter.apply(mary); <span class="comment">// Hello, I am Mary</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-12">
+    <section class="slide-content"><pre><code class="lang-javascript">button = document.getElementById(<span class="string">'my-button'</span>);
+button.addEventListener(<span class="string">'click'</span>, john.greet);
+<span class="comment">// user clicks =&gt; Hello, I am undefined</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-13">
+    <section class="slide-content"><p><img src="images/tenderlove_js_sucks_or_not.png" alt="Tenderlove JS Sucks tweet"></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-14">
+    <section class="slide-content"><p><img src="images/tenderlove_sucumbs.png" alt="Tenderlove sucumbs"></p>
+</section>
+  </div>
+  <div class="slide hidden  quote" id="slide-15">
+    <section class="slide-content"><blockquote>
+<p>The problem with JavaScript is not that it is a dynamically typed prototype based object-oriented language without classes. That is actually JavaScript’s strength. The problem is that it is a poorly designed language, filled with many hidden land mines awaiting the unsuspecting developer.</p>
+</blockquote>
+<p><cite>Jeff Walker - Code Ranger</cite></p>
+</section>
+  </div>
+  <div class="slide hidden  image tweet" id="slide-16">
+    <section class="slide-content"><p><img src="images/asis_agharraa.png" alt="Asís dice"></p>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-17">
+    <section class="slide-content"><p><img src="images/Handgun-pistol-recoil-headshot.gif" alt="Asís dice"></p>
+</section>
+  </div>
+  <div class="slide hidden  cover" id="slide-18">
+    <section class="slide-content"><h2 id="the-world-s-most-misunderstood-programming-language">The world&#39;s most misunderstood programming language</h2>
+<p><a href="http://www.crockford.com/javascript/javascript.html">http://www.crockford.com/javascript/javascript.html</a></p>
+</section>
+  </div>
+  <div class="slide hidden  bullets toc bullets-first" id="slide-19">
+    <section class="slide-content"><h2 id="de-qu-vamos-a-hablar">De qué vamos a hablar</h2>
+<ul>
+<li>Un poco de historia (nuestra historia)</li>
+<li>Lecciones aprendidas</li>
+<li>Q &amp; A</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden  section" id="slide-20">
+    <section class="slide-content"><h2 id="un-poco-de-historia">Un poco de historia</h2>
+<h3 id="-nuestra-historia-">(nuestra historia)</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-21">
+    <section class="slide-content"><h2 id="-intern-eso-qu-es-">¿Interné? ¿Eso qué es?</h2>
+<p>c. 1995</p>
+<ul>
+<li>Netscape 2 &rarr; Javascript</li>
+<li>Creado por Brendan Eich</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-22">
+    <section class="slide-content"><h2 id="html4-css1">HTML4 + CSS1</h2>
+<p>c. 1998-1999</p>
+<pre><code class="lang-xml"><span class="tag">&lt;<span class="title">TABLE</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">TR</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">TD</span>&gt;</span><span class="tag">&lt;<span class="title">IMG</span> <span class="attribute">SRC</span>=<span class="value">"blank.gif"</span> <span class="attribute">WIDTH</span>=<span class="value">300</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">TD</span>&gt;</span><span class="tag">&lt;<span class="title">FONT</span> <span class="attribute">SIZE</span>=<span class="value">42</span>&gt;</span>Hello welcome to this shit<span class="tag">&lt;/<span class="title">FONT</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">TR</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">TR</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">TD</span> <span class="attribute">BGCOLOR</span>=<span class="value">RED</span>&gt;</span><span class="tag">&lt;<span class="title">IMG</span> <span class="attribute">SRC</span>=<span class="value">"/cgi/webcounter.cgi"</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">TR</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">TABLE</span>&gt;</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-23">
+    <section class="slide-content"><p><img src="images/dawsons.gif" alt="Dawson&#39;s Creek"></p>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-24">
+    <section class="slide-content"><p><img src="images/urkel.gif" alt="Urkel"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-25">
+    <section class="slide-content"><h2 id="js-code-by-copy-paste">JS: code by Copy-Paste</h2>
+<h3 id="ositos-volantes">Ositos volantes</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-26">
+    <section class="slide-content"><h2 id="dhtml">DHTML</h2>
+<h3 id="browser-wars-">Browser wars!!!</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-27">
+    <section class="slide-content"><h2 id="batallas">Batallas</h2>
+<ul>
+<li>Soporte del estándar</li>
+<li>Extensiones propietarias</li>
+<li>DOM</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-28">
+    <section class="slide-content"><p><img src="images/yui_talks.png" alt="YUI"></p>
+<p><a href="http://www.yuiblog.com/crockford/">http://www.yuiblog.com/crockford/</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-29">
+    <section class="slide-content"><h2 id="the-js-touch">The JS Touch</h2>
+<h3 id="librer-a-de-animaci-n-_mierder_-o-algo-">Librería de animación <em>mierder</em>. O algo.</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-30">
+    <section class="slide-content"><h3 id="conclusi-n-personal-">Conclusión personal:</h3>
+<h2 id="pues-ser-verdad-br-js-apesta">Pues será verdad,<br>JS apesta</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-31">
+    <section class="slide-content"><h2 id="los-a-os-oscuros">Los años oscuros</h2>
+<p>c. 2002-2003</p>
+<ul>
+<li>JS: ni en pintura</li>
+<li>Server pages: dinamismo en el lado del servidor</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-32">
+    <section class="slide-content"><h2 id="situaciones-tragic-micas">Situaciones tragicómicas</h2>
+<h3 id="viewstate-de-asp-net-omg-">Viewstate de ASP NET. OMG!</h3>
+<h3 id="algo-no-encaja">Algo no encaja</h3>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-33">
+    <section class="slide-content"><p><img src="images/aspnet.png" alt="ASP.NET"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-34">
+    <section class="slide-content"><h2 id="la-luz-al-final-del-t-nel">La luz al final del túnel</h2>
+<p>c. 2006</p>
+<h3 id="-js-cae-en-manos-de-gente-competente-">¡JS cae en manos de gente competente!</h3>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-35">
+    <section class="slide-content"><p><img src="images/fan2.gif" alt="fan"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-36">
+    <section class="slide-content"><h2 id="puntos-de-inflexi-n">Puntos de inflexión</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-37">
+    <section class="slide-content"><h2 id="prototype">Prototype</h2>
+<h3 id="rails">Rails</h3>
+<ul>
+<li>Aislarse de las pescas de los browsers</li>
+<li>Graceful degradation</li>
+<li>Ajax</li>
+<li>Behaviour (componentización)</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-38">
+    <section class="slide-content"><h2 id="primeras-tools-molonas-br-firebug">Primeras tools molonas<br>Firebug</h2>
+<h3 id="despu-s-el-chrome-y-que-se-quite-lo-dem-s">Después el Chrome y que se quite lo demás</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-39">
+    <section class="slide-content"><h2 id="jquery">JQuery</h2>
+<p>c. 2010</p>
+<ul>
+<li>Por los plugins</li>
+<li>Por Rails</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-40">
+    <section class="slide-content"><h2 id="jquery-vs-prototype">JQuery vs Prototype</h2>
+<h3 id="wrapping-vs-extensi-n">wrapping vs extensión</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-41">
+    <section class="slide-content"><h2 id="minimizaci-n-y-transpilers">Minimización y transpilers</h2>
+<p>c. 2011-2012</p>
+<ul>
+<li>Assets pipeline (Rails)</li>
+<li>Minificación</li>
+<li>Coffeescript</li>
+<li>SASS / LESS</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-42">
+    <section class="slide-content"><h2 id="js-hype">JS hype</h2>
+<ul>
+<li>Modularización &amp; Gestión dependencias</li>
+<li>Testing</li>
+<li>Patrones</li>
+<li>Evergreen browsers - HTML5 APIs</li>
+<li>NodeJS</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-43">
+    <section class="slide-content"><h2 id="frameworks-mv-">Frameworks MV*</h2>
+<h3 id="spas">SPAs</h3>
+<ul>
+<li>Routing</li>
+<li>Plantillas en el lado cliente</li>
+<li>Data binding</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden  section" id="slide-44">
+    <section class="slide-content"><h2 id="qu-sabemos-hoy">qué sabemos hoy</h2>
+<h3 id="o-qu-creemos-que-sabemos">o qué creemos que sabemos</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-45">
+    <section class="slide-content"><h2 id="js-es-malo-si-le-dejas">JS es malo si le dejas</h2>
+<h3 id="-puede-ser-bueno-">¿puede ser bueno?</h3>
+</section>
+  </div>
+  <div class="slide hidden  image full-height" id="slide-46">
+    <section class="slide-content"><p><img src="images/js_gp.jpg" alt="JS the good parts"></p>
+</section>
+  </div>
+  <div class="slide hidden  image full-height" id="slide-47">
+    <section class="slide-content"><p><img src="images/the-goog-parts-vs.jpg" alt="JS the good parts vs all the parts"></p>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-48">
+    <section class="slide-content"><p><img src="images/yui_talks.png" alt="YUI"></p>
+<p><a href="http://www.yuiblog.com/crockford/">http://www.yuiblog.com/crockford/</a></p>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-49">
+    <section class="slide-content"><p><img src="images/wat.png" alt="YUI"></p>
+<p><a href="https://www.destroyallsoftware.com/talks/wat">https://www.destroyallsoftware.com/talks/wat</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-50">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="keyword">var</span> o = {
+  f : <span class="keyword">function</span>() { <span class="comment">//... }</span>
+};
+
+o.f();
+
+o[<span class="string">'f'</span>]();
+
+eval(<span class="string">"o.f()"</span>); <span class="comment">// DANGER!</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-51">
+    <section class="slide-content"><h2 id="-use-strict-">&#39;use strict&#39;</h2>
+<p><br></p>
+<pre><code class="lang-javascript"><span class="string">"use strict"</span>;
+mistypedVaraible = <span class="number">17</span>; <span class="comment">// ReferenceError</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-52">
+    <section class="slide-content"><h2 id="js-no-es-java">JS no es Java</h2>
+<ul>
+<li>Sintaxis</li>
+<li>Patrones</li>
+<li>Convenciones</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-53">
+    <section class="slide-content"><h2 id="closures-iif">Closures &amp; IIF</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-54">
+    <section class="slide-content"><pre><code class="lang-javascript">
+<span class="keyword">var</span> three = <span class="number">3</span>;
+
+<span class="keyword">var</span> triple = <span class="keyword">function</span>(x) {
+  <span class="keyword">return</span> x * three;
+}
+
+triple(<span class="number">5</span>) <span class="comment">// 15</span>
+
+three = <span class="number">4</span>;
+
+triple(<span class="number">5</span>) <span class="comment">// 20</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-55">
+    <section class="slide-content"><pre><code class="lang-javascript">
+<span class="keyword">var</span> three = <span class="number">3</span>;
+
+<span class="keyword">var</span> triple = (<span class="keyword">function</span>() {
+  <span class="keyword">var</span> three = <span class="number">3</span>;
+
+  <span class="keyword">return</span> <span class="keyword">function</span>(x) {
+    <span class="keyword">return</span> x * three;
+  }
+})();
+
+triple(<span class="number">5</span>) <span class="comment">// 15</span>
+
+three = <span class="number">4</span>;
+
+triple(<span class="number">5</span>) <span class="comment">// 15</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-56">
+    <section class="slide-content"><pre><code class="lang-javascript">
+<span class="literal">undefined</span> = <span class="number">3</span>; <span class="comment">//WTF!</span>
+$ = {};
+
+(<span class="keyword">function</span>($, window, <span class="literal">undefined</span>) {
+  <span class="comment">// $ is JQuery, window the window</span>
+  <span class="comment">// and undefined is still undefined</span>
+})(jQuery, window);</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-57">
+    <section class="slide-content"><h2 id="module-pattern">Module pattern</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-58">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="keyword">var</span> door = {
+  closed : <span class="literal">true</span>,
+
+  isClosed : <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="keyword">this</span>.closed;
+  },
+
+  <span class="comment">//...</span>
+}
+
+door.isClosed(); <span class="comment">// true</span>
+door.closed = <span class="string">'p0wned!'</span>;
+door.isClosed(); <span class="comment">// p0wned!</span>
+
+<span class="comment">// Truth-y and False-y madness</span>
+door.isClosed() ? <span class="string">'notSoP0wned'</span> : <span class="string">'p0wnedIndeed'</span>; <span class="comment">// notSoP0wned</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-59">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="keyword">var</span> door = (<span class="keyword">function</span>() {
+  <span class="keyword">var</span> closed = <span class="literal">true</span>;
+
+  <span class="keyword">var</span> isClosed = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> closed;
+  }
+
+  <span class="keyword">return</span> {
+    isClosed : isClosed;
+  }
+})();
+
+door.isClosed(); <span class="comment">// true</span>
+door.closed = <span class="string">'p0wned!'</span>;
+door.isClosed(); <span class="comment">// true. FTW</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden  image full-height" id="slide-60">
+    <section class="slide-content"><p><img src="images/js-patterns.png" alt="Javascript Patterns"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-61">
+    <section class="slide-content"><h2 id="todo-es-falso">Todo es falso</h2>
+<h3 id="salvo-alguna-cosa">Salvo alguna cosa</h3>
+<p><img src="images/truthiness.png" alt="verdá"></p>
+<p><a href="http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/">http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/</a></p>
+<p><a href="images/rajoy.webp">&nbsp;</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-62">
+    <section class="slide-content"><h2 id="no-es-lo-mismo">No es lo mismo</h2>
+<h3 id="es-distinto">Es distinto</h3>
+<ul>
+<li><code>==</code> vs <code>===</code></li>
+<li><a href="http://dorey.github.io/JavaScript-Equality-Table/">http://dorey.github.io/JavaScript-Equality-Table/</a></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-63">
+    <section class="slide-content"><h2 id="js-es-oo-con-prototipos">JS <strong>es</strong> OO con prototipos</h2>
+<h3 id="js-no-es-oo-con-clases">JS <strong>no es</strong> OO con clases</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-64">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span><span class="params">(name)</span> {</span>
+  <span class="keyword">this</span>.name = name;
+}
+
+
+Dog.prototype.greet = <span class="keyword">function</span>() {
+  console.log(<span class="string">"Hello, I'm "</span> + <span class="keyword">this</span>.name);
+}
+
+<span class="keyword">var</span> lassie = <span class="keyword">new</span> Dog(<span class="string">'Lassie'</span>);
+<span class="keyword">var</span> trosky = <span class="keyword">new</span> Dog(<span class="string">'Trosky'</span>);
+
+lassie.greet(); <span class="comment">// Hello, I'm Lassie</span>
+trosky.greet(); <span class="comment">// Hello, I'm Trosky</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-65">
+    <section class="slide-content"><p><img src="images/new.jpg" alt="new"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-66">
+    <section class="slide-content"><pre><code class="lang-javascript">console.log(lassie.prototype) <span class="comment">// undefined</span>
+console.log(lassie.__proto__) <span class="comment">// Dog { greet: function }</span>
+
+Dog.prototype === lassie.__proto__ <span class="comment">// true</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-67">
+    <section class="slide-content"><pre><code class="lang-javascript">lassie.run(); <span class="comment">// ERROR!</span>
+
+Dog.prototype.run = <span class="keyword">function</span>() {
+  console.log(<span class="string">'Running like a dog'</span>);
+};
+
+lassie.run(); <span class="comment">// Running like a dog</span>
+
+trosky.run = <span class="keyword">function</span>() {
+  console.log(<span class="string">'Trosky running'</span>);
+}
+
+trosky.run(); <span class="comment">// Trosky running</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-68">
+    <section class="slide-content"><pre><code class="lang-coffeescript"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span>
+  constructor : (<span class="property">@name</span>) -&gt;
+
+  greet : -&gt; console.log <span class="string">"Hello, I'm <span class="subst">#{@name}</span>"</span>
+
+<span class="keyword">new</span> Dog(<span class="string">'Lassie'</span>).greet() <span class="comment"># Hello, I'm Lassie</span>
+<span class="keyword">new</span> Dog(<span class="string">'Trosky'</span>).greet() <span class="comment"># Hello, I'm Trosky</span></code></pre>
+<!-- evidenciar petote de JS generado --></section>
+  </div>
+  <div class="slide hidden" id="slide-69">
+    <section class="slide-content"><h2 id="js-no-es-el-dom">JS no es el DOM</h2>
+<p><br></p>
+<pre><code class="lang-javascript">$(<span class="string">'body'</span>).on(<span class="string">'click'</span>, <span class="string">'[data-behaviour=clear-input]'</span>, <span class="keyword">function</span>(e) {
+  <span class="keyword">var</span> $el;
+  e.preventDefault();
+  $el = $(e.currentTarget);
+  <span class="keyword">return</span> $el.siblings(<span class="string">'input'</span>).val(<span class="string">''</span>);
+});</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-70">
+    <section class="slide-content"><h2 id="js-no-es-jquery">JS no es JQuery</h2>
+<p><br></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> heading = document.createElement(<span class="string">"h1"</span>);
+<span class="keyword">var</span> headingText = document.createTextNode(<span class="string">"Big Head!"</span>);
+
+heading.appendChild(headingText);
+document.body.appendChild(heading);</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-71">
+    <section class="slide-content"><h2 id="santa-trinidad-br-html-css-js">Santa trinidad<br>HTML + CSS + JS</h2>
+<h3 id="estructura-estilos-comportamiento">Estructura, estilos, comportamiento</h3>
+<p><br></p>
+<pre><code class="lang-javascript">$(<span class="string">'.notice'</span>).css({ <span class="string">'color'</span>: <span class="string">'red'</span> }); <span class="comment">// NOP</span>
+
+$(<span class="string">'.notice'</span>).addClass(<span class="string">'alert'</span>); <span class="comment">// YEP</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-72">
+    <section class="slide-content"><h2 id="para-algunas-cosas-se-necesitan-librer-as">Para algunas cosas se necesitan librerías</h2>
+<ul>
+<li>JQuery</li>
+<li>Underscore</li>
+<li>Zepto</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-73">
+    <section class="slide-content"><h2 id="llamadas-ajax">Llamadas AJAX</h2>
+<p><br></p>
+<pre><code class="lang-javascript">$.get(<span class="string">'http://api.com/davidbarral'</span>, <span class="keyword">function</span>(result) { ... });</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-74">
+    <section class="slide-content"><h2 id="callbacks-vs-promesas">Callbacks vs promesas</h2>
+<h3 id="spaghetti-vs-lasagna">Spaghetti vs lasagna</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-75">
+    <section class="slide-content"><pre><code class="lang-javascript">
+$.get(<span class="string">'http://api.com/davidbarral'</span>, <span class="keyword">function</span>() {
+  $.get(<span class="string">'http://api.com/asischao'</span>, <span class="keyword">function</span>() {
+    $.get(<span class="string">'http://api.com/trabe'</span>, <span class="keyword">function</span>() {
+      console.log(<span class="string">'All together right now!'</span>);
+    }
+  }
+});</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-76">
+    <section class="slide-content"><pre><code class="lang-javascript">
+<span class="keyword">var</span> done = <span class="number">0</span>;
+
+<span class="function"><span class="keyword">function</span> <span class="title">callback</span><span class="params">()</span> {</span>
+  done += <span class="number">1</span>;
+
+  <span class="keyword">if</span> (done === <span class="number">3</span>) {
+    console.log(<span class="string">'All together right now!'</span>);
+  }
+};
+
+$.get(<span class="string">'http://api.com/davidbarral'</span>, callback);
+$.get(<span class="string">'http://api.com/asischao'</span>, callback);
+$.get(<span class="string">'http://api.com/trabe'</span>, callback);</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-77">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="keyword">var</span> davidbarral = $.get(<span class="string">'http://api.com/davidbarral'</span>);
+<span class="keyword">var</span> asischao = $.get(<span class="string">'http://api.com/asischao'</span>);
+<span class="keyword">var</span> trabe = $.get(<span class="string">'http://api.com/trabe'</span>);
+
+$.when(davidbarral, asischao, trabe).done(<span class="keyword">function</span>() {
+  console.log(<span class="string">'Maaaambo!'</span>)
+});</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-78">
+    <section class="slide-content"><pre><code class="lang-javascript"><span class="function"><span class="keyword">function</span> <span class="title">myThing</span><span class="params">()</span> {</span>
+  <span class="keyword">var</span> deferred = $.Deferred()
+
+  <span class="comment">// ...</span>
+  <span class="comment">// resolve the deferred</span>
+  <span class="comment">// ...</span>
+
+  <span class="keyword">return</span> deferred.promise();
+}
+
+myThing().done(<span class="keyword">function</span>() {
+  console.log(<span class="string">'Done!'</span>);
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-79">
+    <section class="slide-content"><h2 id="para-algunas-cosas-no-se-necesitan-librer-as">Para algunas cosas <strong>no</strong> se necesitan librerías</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-80">
+    <section class="slide-content"><h2 id="una-aplicaci-n-js-es-una-aplicaci-n">Una aplicación JS es una aplicación</h2>
+<h3 id="tauto">Tauto</h3>
+<ul>
+<li>Patrones</li>
+<li>Peculiaridades (entorno de ejecución, rendimiento, etc.)</li>
+</ul>
+<!-- JS no es el DOM. Rendimiento suele. --></section>
+  </div>
+  <div class="slide hidden" id="slide-81">
+    <section class="slide-content"><h2 id="el-mvc-js">El MVC JS</h2>
+<ul>
+<li>Modelo: objetos JS</li>
+<li>Vista: plantillas JS (funciones) o trozos del DOM</li>
+<li>Controlador: gestión de eventos</li>
+<li>Separar JS de CSS (attributos DATA)</li>
+<li>Proxificar eventos, bus eventos (microevents, $({})) <!-- transpa de rich hickey, independizar con cola de mensajes. --></li>
+</ul>
+<p><a href="http://jsbin.com/cirijehi/1/edit">http://jsbin.com/cirijehi/1/edit</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-82">
+    <section class="slide-content"><h2 id="usar-un-framework-mv-">Usar un framework MV*</h2>
+<ul>
+<li>Estructura</li>
+<li>Utilidades: data-binding, routing, estado, persistencia, etc.</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-83">
+    <section class="slide-content"><h2 id="tests">Tests</h2>
+<ul>
+<li>Headless testing</li>
+<li>Desacoplar el DOM: very very hard!</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-84">
+    <section class="slide-content"><pre><code class="lang-javascript">
+describe(<span class="string">'doubler'</span>, <span class="keyword">function</span>() {
+    it(<span class="string">'doubles a number'</span>, <span class="keyword">function</span>() {
+      expect(doubler(<span class="number">5</span>)).toEqual(<span class="number">10</span>);
+    });
+});
+
+<span class="function"><span class="keyword">function</span> <span class="title">doubler</span><span class="params">(x)</span> {</span>
+  <span class="keyword">return</span> <span class="number">2</span> * x;
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-85">
+    <section class="slide-content"><h2 id="let-go-and-move-on">Let go and move on</h2>
+<h3 id="si-es-posible-usa-s-lo-navegadores-modernos">Si es posible, usa sólo navegadores modernos</h3>
+<ul>
+<li><a href="http://caniuse.com">http://caniuse.com</a></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden  section" id="slide-86">
+    <section class="slide-content"><h2 id="conclusiones">Conclusiones</h2>
+</section>
+  </div>
+  <div class="slide hidden  quote" id="slide-87">
+    <section class="slide-content"><p>Atwood&#39;s Law:</p>
+<p>Any application that can be written in JavaScript,
+will eventually be written in JavaScript</p>
+<p><a href="http://blog.codinghorror.com/the-principle-of-least-power/">http://blog.codinghorror.com/the-principle-of-least-power/</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-88">
+    <section class="slide-content"><h2 id="por-ejemplo-esta-presentaci-n-se-genera-con-js">Por ejemplo, esta presentación se genera con JS</h2>
+<ul>
+<li><a href="http://github.com/jdan/cleaver">http://github.com/jdan/cleaver</a></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-89">
+    <section class="slide-content"><h2 id="l-ete-estos-libros">Léete estos libros</h2>
+<ul>
+<li>Javascript: the good parts - D. Crockford</li>
+<li>Javascript patterns - S. Stefanov</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-90">
+    <section class="slide-content"><h2 id="usa-buena-documentaci-n">Usa buena documentación</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/">https://developer.mozilla.org/en-US/</a></li>
+<li><a href="http://stackoverflow.com">http://stackoverflow.com</a> ;)</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-91">
+    <section class="slide-content"><h2 id="aprende-a-usar-esta-herramienta">Aprende a usar esta herramienta</h2>
+<ul>
+<li>Chrome dev tools</li>
+</ul>
+<!--
+Ejemplos de, console.log, debugger, resources, network flush, breakpoints (break on node changes, xhr breakpoints), Device emulation, Audits
+http://berzniz.com/post/78260747646/5-javascript-debugging-tips-youll-start-using-today --></section>
+  </div>
+  <div class="slide hidden" id="slide-92">
+    <section class="slide-content"><h2 id="b-scate-un-framework-de-testing">Búscate un framework de testing</h2>
+<ul>
+<li>Jasmine</li>
+<li>Mocha</li>
+<li>QUnit</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-93">
+    <section class="slide-content"><h2 id="elige-la-soluci-n-apropiada">Elige la solución apropiada</h2>
+<ul>
+<li>Chambas JS + Ajax</li>
+<li>RJS</li>
+<li>Single Page Apps</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden  image" id="slide-94">
+    <section class="slide-content"><p><img src="images/read_write.png" alt="11 steps to become a better coder"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-95">
+    <section class="slide-content"><h2 id="people-to-follow">People to follow</h2>
+<ul>
+<li>Crockford +DouglasCrockfordEsq</li>
+<li>Stefanov @stoyanstefanov</li>
+<li>Addy Osmani @addyosmani</li>
+<li>David Walsh @davidwalshblog</li>
+<li>Paul Irish @paul_irish</li>
+<li>Ilya Grigorik @igrigorik</li>
+<li>Steve Souders @souders</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-96">
+    <section class="slide-content"><h2 id="el-futuro-ecmascript-6">El futuro: ECMAScript 6</h2>
+<ul>
+<li>Traceur Compiler: JSNext &rarr; ECMASCript 5</li>
+<li><a href="https://github.com/google/traceur-compiler">https://github.com/google/traceur-compiler</a></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-97">
+    <section class="slide-content"><h1 id="-eso-es-todo-amigos-">¡Eso es todo amigos!</h1>
+<h2 id="-preguntas-">¿Preguntas?</h2>
+</section>
+  </div>
+
+
+
+  <script type="text/javascript">
+    /**
+ * Returns the current page number of the presentation.
+ */
+function currentPosition() {
+  return parseInt(document.querySelector('.slide:not(.hidden)').id.slice(6));
+}
+
+
+/**
+ * Navigates forward n pages
+ * If n is negative, we will navigate in reverse
+ */
+function navigate(n) {
+  var position = currentPosition();
+  var numSlides = document.getElementsByClassName('slide').length;
+
+  /* Positions are 1-indexed, so we need to add and subtract 1 */
+  var nextPosition = (position - 1 + n) % numSlides + 1;
+
+  /* Normalize nextPosition in-case of a negative modulo result */
+  nextPosition = (nextPosition - 1 + numSlides) % numSlides + 1;
+
+  document.getElementById('slide-' + position).classList.add('hidden');
+  document.getElementById('slide-' + nextPosition).classList.remove('hidden');
+
+  updateProgress();
+  updateURL();
+  updateTabIndex();
+}
+
+
+/**
+ * Updates the current URL to include a hashtag of the current page number.
+ */
+function updateURL() {
+  window.history.replaceState({} , null, '#' + currentPosition());
+}
+
+
+/**
+ * Sets the progress indicator.
+ */
+function updateProgress() {
+  var progressBar = document.querySelector('.progress-bar');
+
+  if (progressBar !== null) {
+    var numSlides = document.getElementsByClassName('slide').length;
+    var position = currentPosition() - 1;
+    var percent = (numSlides === 1) ? 100 : 100 * position / (numSlides - 1);
+    progressBar.style.width = percent.toString() + '%';
+  }
+}
+
+
+/**
+ * Removes tabindex property from all links on the current slide, sets
+ * tabindex = -1 for all links on other slides. Prevents slides from appearing
+ * out of control.
+ */
+function updateTabIndex() {
+  var allLinks = document.querySelectorAll('.slide a');
+  var position = currentPosition();
+  var currentPageLinks = document.getElementById('slide-' + position).querySelectorAll('a');
+  var i;
+
+  for (i = 0; i < allLinks.length; i++) {
+    allLinks[i].setAttribute('tabindex', -1);
+  }
+
+  for (i = 0; i < currentPageLinks.length; i++) {
+    currentPageLinks[i].removeAttribute('tabindex');
+  }
+}
+
+/**
+ * Determines whether or not we are currently in full screen mode
+ */
+function isFullScreen() {
+  return document.fullscreenElement ||
+         document.mozFullScreenElement ||
+         document.webkitFullscreenElement ||
+         document.msFullscreenElement;
+}
+
+/**
+ * Toggle fullScreen mode on document element.
+ * Works on chrome (>= 15), firefox (>= 9), ie (>= 11), opera(>= 12.1), safari (>= 5).
+ */
+function toggleFullScreen() {
+  /* Convenient renames */
+  var docElem = document.documentElement;
+  var doc = document;
+
+  docElem.requestFullscreen =
+      docElem.requestFullscreen ||
+      docElem.msRequestFullscreen ||
+      docElem.mozRequestFullScreen ||
+      docElem.webkitRequestFullscreen.bind(docElem, Element.ALLOW_KEYBOARD_INPUT);
+
+  doc.exitFullscreen =
+      doc.exitFullscreen ||
+      doc.msExitFullscreen ||
+      doc.mozCancelFullScreen ||
+      doc.webkitExitFullscreen;
+
+  isFullScreen() ? doc.exitFullscreen() : docElem.requestFullscreen();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Update the tabindex to prevent weird slide transitioning
+  updateTabIndex();
+
+  // If the location hash specifies a page number, go to it.
+  var page = window.location.hash.slice(1);
+  if (page) {
+    navigate(parseInt(page) - 1);
+  }
+
+  document.onkeydown = function (e) {
+    var kc = e.keyCode;
+
+    // left, down, H, J, backspace, PgUp - BACK
+    // up, right, K, L, space, PgDn - FORWARD
+    // enter - FULLSCREEN
+    if (kc === 37 || kc === 40 || kc === 8 || kc === 72 || kc === 74 || kc === 33) {
+      navigate(-1);
+    } else if (kc === 38 || kc === 39 || kc === 32 || kc === 75 || kc === 76 || kc === 34) {
+      navigate(1);
+    } else if (kc === 13) {
+      toggleFullScreen();
+    }
+  };
+
+  if (document.querySelector('.next') && document.querySelector('.prev')) {
+    document.querySelector('.next').onclick = function (e) {
+      e.preventDefault();
+      navigate(1);
+    };
+
+    document.querySelector('.prev').onclick = function (e) {
+      e.preventDefault();
+      navigate(-1);
+    };
+  }
+});
+
+
+  </script>
+</body>
+</html>
